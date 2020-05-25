@@ -1,0 +1,34 @@
+Objetivo: Relatório
+Código: 
+	Produzir material para o relatório
+	Material:
+		- imagens
+		- métricas:
+			* # passos
+			* caminho
+
+
+A)
+- Ler labirinto
+	- recebo nome arquivo
+- Resolver
+- Retornar caminho
+-> desenhar labirinto
+-> desenar a resolução para os 5 algoritmos
+
+TODO:
+	- criar class Animation
+
+B)
+- tamanhos = [10, 30, 100]
+- n = 30
+- posicao inicial x final
+
+for t in tamanho:
+	for rep in n:
+		maze = gerar_labirinto(t)
+
+		for i in range(10):
+			escolher posição final
+			rodar algoritmos
+
