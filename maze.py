@@ -5,31 +5,22 @@ import cv2
 import os
 
 def file_exists(filename):
+	""" Verifica se um arquivo existe na pasta local """
 	return os.path.isfile(filename)
 
 def folder_exists(foldername):
+	""" Verifica se um diretorio existe na pasta local """
 	return os.path.isdir(foldername)
 
 def draw_square(color):
+	""" Cria uma matriz de 20*20*3 com a cor definida """
 	square = np.full((20,20,3), color)
 
 	return square
 
-def find_moves(position, matrix, maze):
-	directions = [[-1,0], [1,0], [0,1], [0,-1]]
-	moves = list()
-
-	for pair in directions:
-		x = pair[0] + position[0]
-		y = pair[1] + position[1]
-		if x >= 0 and x < maze.height and y >= 0 and y < maze.width:
-			if matrix[x][y] > 0:
-				moves.append([x,y])
-
-	return moves
-
-
 def read_maze(filename):
+	""" Le um arquivo e retorna as informacoes da matriz """
+
 	with open(filename) as fp:
 		line = fp.readline()
 		height = int(line[0:2])
@@ -58,6 +49,7 @@ def read_maze(filename):
 	return height, width, maze, begin, end
 
 class Maze:
+	""" Guarda as informacoes do labirinto """
 	def __init__(self, filename):
 		info = read_maze(filename)
 		self.height = info[0]
@@ -73,7 +65,24 @@ class Maze:
 
 		return aux
 
+	def find_moves(self, position, matrix):
+		""" Dada uma posicao inicial, retorna uma lista de movimentos possiveis """
+
+		directions = [[-1,0], [1,0], [0,1], [0,-1]]
+		moves = list()
+
+		for pair in directions:
+			x = pair[0] + position[0]
+			y = pair[1] + position[1]
+			if x >= 0 and x < self.height and y >= 0 and y < self.width:
+				if matrix[x][y] > 0:
+					moves.append([x,y])
+
+		return moves
+
 	def draw(self):
+		""" Transforma o labirinto em uma imagem """
+
 		img = np.zeros((self.height * 20, self.width * 20, 3))
 
 		black =	draw_square((0,0,0))
@@ -100,6 +109,8 @@ class Maze:
 		return img
 
 class Algorithm():
+	""" Implementa os algoritmos """
+
 	def depth_first_search(maze):
 		matrix = np.copy(maze.matrix)
 		parent = dict()
@@ -115,7 +126,7 @@ class Algorithm():
 			if cur_pos == maze.end:
 				break
 
-			moves = find_moves(cur_pos, matrix, maze)
+			moves = maze.find_moves(cur_pos, matrix)
 			for move in moves:
 				matrix[move[0], move[1]] = -1
 				stack.append(move)
@@ -124,7 +135,11 @@ class Algorithm():
 		return path
 
 class Animation:
+	""" Realiza as operacoes sobre imagens """
+
 	def make_images(path, maze):
+		""" Percorre o labirinto de acordo com path e gera uma lista de imagens
+				representando essa travessia """
 		imgs = list()
 
 		original_matrix = np.copy(maze.matrix)
@@ -139,6 +154,8 @@ class Animation:
 		return imgs
 
 	def save_images(images, folder):
+		""" Salva uma lista de imagens dentro de folder """
+
 		if not folder_exists(folder):
 			os.mkdir(folder)
 
@@ -149,6 +166,8 @@ class Animation:
 
 
 	def make_video(images, video_name):
+		""" Transforma uma lista de imagens em video """
+
 		height, width, layers=images[0].shape
 
 		fourcc = cv2.VideoWriter_fourcc(*'mp4v')
