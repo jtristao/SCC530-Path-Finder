@@ -108,32 +108,6 @@ class Maze:
 
 		return img
 
-class Algorithm():
-	""" Implementa os algoritmos """
-
-	def depth_first_search(maze):
-		matrix = np.copy(maze.matrix)
-		parent = dict()
-		stack = list()
-		path = list()
-
-		stack.append(maze.start)
-
-		while stack:
-			cur_pos = stack.pop()
-			path.append(cur_pos)
-
-			if cur_pos == maze.end:
-				break
-
-			moves = maze.find_moves(cur_pos, matrix)
-			for move in moves:
-				matrix[move[0], move[1]] = -1
-				stack.append(move)
-				parent[tuple(move)] = cur_pos
-
-		return path
-
 class Animation:
 	""" Realiza as operacoes sobre imagens """
 
@@ -184,6 +158,67 @@ class Animation:
 		Animation.make_video(images, video_name)
 
 
+
+class Algorithm():
+	""" Implementa os algoritmos """
+
+	def depth_first_search(maze):
+		matrix = np.copy(maze.matrix)
+		stack = list()
+		path = list()
+
+		stack.append(maze.start)
+
+		while stack:
+			cur_pos = stack.pop()
+			path.append(cur_pos)
+
+			if cur_pos == maze.end:
+				break
+
+			moves = maze.find_moves(cur_pos, matrix)
+			for move in moves:
+				matrix[move[0], move[1]] = -1
+				stack.append(move)
+
+		return path, -1
+
+	def __bfs_min_path(parent, begin, end):
+		min_path = list()
+		cur_pos = tuple(begin)
+
+		while cur_pos != end:
+			min_path.append(cur_pos)
+			cur_pos = parent[tuple(cur_pos)]
+
+		return min_path
+
+
+	def breadth_first_search(maze):
+		matrix = np.copy(maze.matrix)
+		parent = dict()
+		queue = list()
+		path = list()
+
+		queue.append(maze.start)
+
+		while queue:
+			cur_pos = queue.pop(0)
+			path.append(cur_pos)
+
+			if cur_pos == maze.end:
+				break
+
+			moves = maze.find_moves(cur_pos, matrix)
+			for move in moves:
+				matrix[move[0], move[1]] = -1
+				queue.append(move)
+				parent[tuple(move)] = cur_pos
+
+		min_path = Algorithm.__bfs_min_path(parent, maze.end, maze.start)
+
+		return min_path, path
+
 def main():
 	if len(argv) != 2:
 		print("Usage:")
@@ -197,8 +232,15 @@ def main():
 		exit(0)
 
 	maze = Maze(filename)
-	path = Algorithm.depth_first_search(maze)
-	Animation.animate_path(path, maze, "dfs.avi")
+	min_path, path = Algorithm.breadth_first_search(maze)
+	print(min_path)
+	print(path)
+	images = Animation.make_images(path, maze)
+	images += Animation.make_images(min_path, maze)
+
+	Animation.make_video(images, "bfs.avi")
+
+	# Animation.animate_path(path, maze, "dfs.avi")
 
 if __name__ == '__main__':
 	main()
