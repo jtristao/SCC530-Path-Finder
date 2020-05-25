@@ -138,6 +138,16 @@ class Animation:
 
 		return imgs
 
+	def save_images(images, folder):
+		if not folder_exists(folder):
+			os.mkdir(folder)
+
+		image_num = 0
+		for image in images:
+			imageio.imwrite("{}/{:03d}.png".format(folder, image_num), image)
+			image_num += 1
+
+
 	def make_video(images, video_name):
 		height, width, layers=images[0].shape
 
@@ -153,6 +163,7 @@ class Animation:
 	def animate_path(path, maze, video_name):
 		images = Animation.make_images(path, maze)
 		Animation.make_video(images, video_name)
+
 
 def main():
 	if len(argv) != 2:
