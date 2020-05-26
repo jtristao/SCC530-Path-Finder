@@ -1,10 +1,9 @@
-from Algorithm import Algorithm
 from Maze import Maze
 from sys import argv
 import Animation
+import Algorithm
 import os
 
-import heapq
 
 def file_exists(filename):
 	""" Verifica se um arquivo existe na pasta local """
@@ -39,7 +38,7 @@ def main():
 	path, min_path = Algorithm.best_first_search(maze, "euclidean")
 	Animation.animate_path(path, min_path, (255,255,51), maze, "best.avi")
 	
-	# # A*
+	# A*
 	print("Building A* Search...")
 	path, min_path = Algorithm.a_star_search(maze, "euclidean")
 	Animation.animate_path(path, min_path, (255,255,51), maze, "star.avi")
