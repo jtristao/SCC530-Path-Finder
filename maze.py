@@ -1,10 +1,10 @@
-from Animation import Animation
 from Algorithm import Algorithm
 from Maze import Maze
 from sys import argv
-import imageio
-import numpy as np
+import Animation
 import os
+
+import heapq
 
 def file_exists(filename):
 	""" Verifica se um arquivo existe na pasta local """
@@ -30,9 +30,25 @@ def main():
 	Animation.animate_path(path, min_path, (255,255,51), maze, "dfs.avi")
 
 	# BFS
-	print("Building BFS...")
+	print("Building Breadth First Search...")
 	path, min_path = Algorithm.breadth_first_search(maze)
 	Animation.animate_path(path, min_path, (255,255,51), maze, "bfs.avi")
+
+	# Best Search First
+	print("Building Best First Search...")
+	path, min_path = Algorithm.best_first_search(maze, "euclidean")
+	Animation.animate_path(path, min_path, (255,255,51), maze, "best.avi")
+	
+	# # A*
+	print("Building A* Search...")
+	path, min_path = Algorithm.a_star_search(maze, "euclidean")
+	Animation.animate_path(path, min_path, (255,255,51), maze, "star.avi")
+
+
+	# Hill Climbing*
+	print("Building Hill Climbing Search...")
+	path, min_path = Algorithm.hill_climbing_search(maze, "euclidean")
+	Animation.animate_path(path, min_path, (255,255,51), maze, "hill.avi")
 
 
 if __name__ == '__main__':

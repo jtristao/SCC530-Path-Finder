@@ -16,9 +16,6 @@ A)
 -> desenhar labirinto
 -> desenar a resolução para os 5 algoritmos
 
-TODO:
-	- criar class Animation
-
 B)
 - tamanhos = [10, 30, 100]
 - n = 30
@@ -32,3 +29,6 @@ for t in tamanho:
 			escolher posição final
 			rodar algoritmos
 
+TODO:
+	- Adicionar lance de requirements.txt pra instalar as bibliotecas
+	- Mudar as cores, ta meio feio 
