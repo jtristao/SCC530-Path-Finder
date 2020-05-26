@@ -1,2 +1,6 @@
 # Pycache files
 __pycache__
+
+
+# Video files
+*.avi
