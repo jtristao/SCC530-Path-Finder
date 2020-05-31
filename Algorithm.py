@@ -65,7 +65,7 @@ def breadth_first_search(maze):
 
 	return path, min_path
 
-def best_first_search(maze, heuristic):
+def best_first_search(maze, heuristic="euclidean"):
 	matrix = np.copy(maze.matrix)
 
 	path = list()
@@ -95,7 +95,7 @@ def best_first_search(maze, heuristic):
 
 	return path, min_path
 
-def a_star_search(maze, heuristic):
+def a_star_search(maze, heuristic="euclidean"):
 	matrix = np.copy(maze.matrix)
 
 	path = list()
@@ -129,7 +129,7 @@ def a_star_search(maze, heuristic):
 
 	return path, min_path
 
-def hill_climbing_search(maze, heuristic):
+def hill_climbing_search(maze, heuristic="euclidean"):
 	matrix = np.copy(maze.matrix)
 	stack = list()
 	path = list()

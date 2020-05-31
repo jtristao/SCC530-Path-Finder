@@ -1,3 +1,5 @@
+from pymaze.maze import Maze as mz
+import random as rd
 import numpy as np
 
 def read_maze(filename):
@@ -39,14 +41,15 @@ def draw_square(color):
 
 class Maze:
 	""" Guarda as informacoes do labirinto """
-	def __init__(self, filename=None, random=False, height=-1, width=-1, start=[-1,-1], end=[-1,-1]):
+	def __init__(self, filename=None, random=False, height=-1, width=-1):
 		if random:
-			self.height = height
-			self.width = width 
-			self.matrix = Maze.random_maze(height, width, tuple(start))
-			self.start = start
-			self.end = end
-		else if filename:
+			self.height = height+1
+			self.width = width+1
+			self.matrix = Maze.random_maze(height, width)
+			self.start = [1,1]
+			self.end = [self.height-2, self.width-2]
+
+		elif filename:
 			info = read_maze(filename)
 			self.height = info[0]
 			self.width = info[1] 
@@ -114,42 +117,34 @@ class Maze:
 
 		return img
 
-	def random_maze(height, width, start):
-		maze = [[0 for x in range(height)] for y in range(width)]
-		dx = [0, 1, 0, -1]
-		dy = [-1, 0, 1, 0] # 4 directions to move in the maze
+	def random_maze(height, width):
+		symbols = {
+			# default symbols
+			'start' : '#',
+			'end' : '$',
+			'wall_v'  : '-',
+			'wall_h' : '-',
+			'wall_c' : '-',
+			'head' :  '#',
+			'tail' : 'o',	
+			'empty' : '*'
+		}
 
-		# start the maze from a random cell
-		stack = [start]
+		maze_obj = mz(height//2, width//2, rd.random(), symbols)
+		str_obj = maze_obj.to_str()
+		
+		matrix = np.zeros(((height+1) * (width+1)))
 
-		while len(stack) > 0:
-			(x, y) = stack[-1]
-			maze[y][x] = 1
-			# find a new cell to add
-			neighbours_list = [] # list of available neighbors
-			for i in range(4):
-				neighbor_x = x + dx[i]
-				neighbor_y = y + dy[i]
-				if neighbor_x >= 0 and neighbor_x < height and neighbor_y >= 0 and neighbor_y < width:
-					if maze[neighbor_y][neighbor_x] == 0:
-						# of occupied neighbors must be 1
-						ctr = 0
-						for j in range(4):
-							ex = neighbor_x + dx[j]
-							ey = neighbor_y + dy[j]
-							if ex >= 0 and ex < height and ey >= 0 and ey < width:
-								if maze[ey][ex] == 1: 
-									ctr += 1
-									if ctr == 1: 
-										neighbours_list.append(i)
+		i = 0
+		for char in str_obj:
+			# print(char, end="")
+			if char == "*" or char == "$" or char == "#":	
+				matrix[i] = 1
+				i += 1
+			elif char == "-":
+				matrix[i] = 0
+				i += 1
 
-			# if 1 or more neighbors available then randomly select one and move
-			if len(neighbours_list) > 0:
-				ir = neighbours_list[random.randint(0, len(neighbours_list) - 1)]
-				x += dx[ir]
-				y += dy[ir]
-				stack.append((x, y))
-			else: 
-				stack.pop()
+		matrix = np.reshape(matrix, (height+1, width+1))
 
-		return maze
+		return matrix

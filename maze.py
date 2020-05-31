@@ -2,7 +2,6 @@ from Maze import Maze
 from sys import argv
 import Animation
 import Algorithm
-import random
 import os
 
 
@@ -36,18 +35,18 @@ def main():
 
 	# Best Search First
 	print("Building Best First Search...")
-	path, min_path = Algorithm.best_first_search(maze, "euclidean")
+	path, min_path = Algorithm.best_first_search(maze)
 	Animation.animate_path(path, min_path, (255,255,51), maze, "best.avi")
 	
 	# A*
 	print("Building A* Search...")
-	path, min_path = Algorithm.a_star_search(maze, "euclidean")
+	path, min_path = Algorithm.a_star_search(maze)
 	Animation.animate_path(path, min_path, (255,255,51), maze, "star.avi")
 
 
 	# Hill Climbing*
 	print("Building Hill Climbing Search...")
-	path, min_path = Algorithm.hill_climbing_search(maze, "euclidean")
+	path, min_path = Algorithm.hill_climbing_search(maze)
 	Animation.animate_path(path, min_path, (255,255,51), maze, "hill.avi")
 
 
