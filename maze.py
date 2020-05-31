@@ -2,6 +2,7 @@ from Maze import Maze
 from sys import argv
 import Animation
 import Algorithm
+import random
 import os
 
 

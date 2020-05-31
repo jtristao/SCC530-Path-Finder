@@ -39,13 +39,23 @@ def draw_square(color):
 
 class Maze:
 	""" Guarda as informacoes do labirinto """
-	def __init__(self, filename):
-		info = read_maze(filename)
-		self.height = info[0]
-		self.width = info[1] 
-		self.matrix = info[2]
-		self.start = info[3]
-		self.end = info[4]
+	def __init__(self, filename=None, random=False, height=-1, width=-1, start=[-1,-1], end=[-1,-1]):
+		if random:
+			self.height = height
+			self.width = width 
+			self.matrix = Maze.random_maze(height, width, tuple(start))
+			self.start = start
+			self.end = end
+		else if filename:
+			info = read_maze(filename)
+			self.height = info[0]
+			self.width = info[1] 
+			self.matrix = info[2]
+			self.start = info[3]
+			self.end = info[4]
+		else:
+			print("Invalid Arguments Building Maze.")
+
 
 	def __str__(self):
 		aux = "dim = ({}, {})\n".format(self.height, self.width)
@@ -103,3 +113,43 @@ class Maze:
 		img = np.asarray(img, dtype="uint8")
 
 		return img
+
+	def random_maze(height, width, start):
+		maze = [[0 for x in range(height)] for y in range(width)]
+		dx = [0, 1, 0, -1]
+		dy = [-1, 0, 1, 0] # 4 directions to move in the maze
+
+		# start the maze from a random cell
+		stack = [start]
+
+		while len(stack) > 0:
+			(x, y) = stack[-1]
+			maze[y][x] = 1
+			# find a new cell to add
+			neighbours_list = [] # list of available neighbors
+			for i in range(4):
+				neighbor_x = x + dx[i]
+				neighbor_y = y + dy[i]
+				if neighbor_x >= 0 and neighbor_x < height and neighbor_y >= 0 and neighbor_y < width:
+					if maze[neighbor_y][neighbor_x] == 0:
+						# of occupied neighbors must be 1
+						ctr = 0
+						for j in range(4):
+							ex = neighbor_x + dx[j]
+							ey = neighbor_y + dy[j]
+							if ex >= 0 and ex < height and ey >= 0 and ey < width:
+								if maze[ey][ex] == 1: 
+									ctr += 1
+									if ctr == 1: 
+										neighbours_list.append(i)
+
+			# if 1 or more neighbors available then randomly select one and move
+			if len(neighbours_list) > 0:
+				ir = neighbours_list[random.randint(0, len(neighbours_list) - 1)]
+				x += dx[ir]
+				y += dy[ir]
+				stack.append((x, y))
+			else: 
+				stack.pop()
+
+		return maze
