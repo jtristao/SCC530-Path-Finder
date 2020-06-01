@@ -18,4 +18,4 @@ Usage: `python3 Maze/video_generator.py path/to/mazename`.
 
 This program will return an average comparation between all algorithms for random generated mazes with sizes 50, 100, 250.
     
-Usage: `python3 Maze/stats.py path/to/mazename`
+Usage: `python3 Maze/stats.py`
