@@ -74,7 +74,6 @@ def best_first_search(maze, heuristic="euclidean"):
 	heap = [(0, maze.start[0], maze.start[1])]
 	heapq.heapify(heap)
 
-
 	while heap:
 		cur_pos = heapq.heappop(heap)
 		val = cur_pos[0]
