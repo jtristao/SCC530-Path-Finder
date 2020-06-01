@@ -5,6 +5,7 @@ def find_distance(coord, maze, heuristic):
 	if heuristic == "euclidean":
 		return ((coord[0] - maze.end[0])**2 + (coord[1] - maze.end[1])**2)**0.5
 	else:
+		# Manhattan
 		return abs(coord[0] - maze.end[0]) + abs(coord[1] - maze.end[1])
 
 def __min_path(parent, begin, end):
@@ -87,6 +88,7 @@ def best_first_search(maze, heuristic="euclidean"):
 		moves = maze.find_moves(coord, matrix)
 		for move in moves:
 			matrix[coord[0], coord[1]] = -1
+			# f(n) = distance(n)
 			distance = find_distance(move, maze, heuristic)
 			heapq.heappush(heap, (distance, move[0], move[1]))
 			parent[tuple(move)] = coord
@@ -120,6 +122,7 @@ def a_star_search(maze, heuristic="euclidean"):
 		for move in moves:
 			matrix[coord[0], coord[1]] = -1
 
+			# f(n) = distance(n) + peso(n)
 			distance = find_distance(move, maze, heuristic) + height + 1
 
 			heapq.heappush(heap, (distance, height+1, move[0], move[1]))
