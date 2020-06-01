@@ -4,7 +4,7 @@ Python Maze solver using Deapth-first search, Breadth-first search, Best-first s
 
 ## Requirements
 
-Can be installed with: `python3 -m pip install requirements.txt`.
+Can be installed with: `python3 -m pip install -r requirements.txt`.
 
 ## Usage
 
